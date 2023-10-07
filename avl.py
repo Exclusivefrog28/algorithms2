@@ -1,72 +1,65 @@
-class SplayTreeNode:
+class AVLTreeNode:
     def __init__(self, key):
         self.key = key
         self.left = None
         self.right = None
         self.parent = None
+        self.height = 1
+        self.balance = 0
 
 
-class SplayTree:
+class AVLTree:
     def __init__(self):
         self.root = None
+        self.single_rotations = 0
+        self.double_rotations = 0
 
     def insert(self, key):
-        current_node = self.root
+        if self.root is None:
+            self.root = AVLTreeNode(key)
+        else:
+            self._insert(self.root, key)
 
-        if current_node is None:
-            self.root = SplayTreeNode(key)
-            return
-
-        while True:
-            if key < current_node.key:
-                if current_node.left is None:
-                    current_node.left = SplayTreeNode(key)
-                    current_node.left.parent = current_node
-                    self.splay(current_node.left)
-                    return
-                else:
-                    current_node = current_node.left
+    def _insert(self, node, key):
+        if key < node.key:
+            if node.left is None:
+                node.left = AVLTreeNode(key)
+                node.left.parent = node
+                self.rebalance(node)
             else:
-                if current_node.right is None:
-                    current_node.right = SplayTreeNode(key)
-                    current_node.right.parent = current_node
-                    self.splay(current_node.right)
-                    return
-                else:
-                    current_node = current_node.right
+                self._insert(node.left, key)
 
-    def splay(self, node):
-        if node.parent is None:
-            return
-
-        parent = node.parent
-        grandparent = parent.parent
-
-        if grandparent is None:
-            if node == parent.left:
-                self.right_rotate(parent)
+        else:
+            if node.right is None:
+                node.right = AVLTreeNode(key)
+                node.right.parent = node
+                self.rebalance(node)
             else:
-                self.left_rotate(parent)
+                self._insert(node.right, key)
 
-        if node == parent.left and parent == grandparent.left:
-            self.right_rotate(grandparent)
-            self.right_rotate(parent)
-        elif node == parent.right and parent == grandparent.right:
-            self.left_rotate(grandparent)
-            self.left_rotate(parent)
-        elif node == parent.left and parent == grandparent.right:
-            self.right_rotate(parent)
-            self.left_rotate(grandparent)
-        elif node == parent.right and parent == grandparent.left:
-            self.left_rotate(parent)
-            self.right_rotate(grandparent)
+    def rebalance(self, node):
+        self.calculate_heights(node)
 
-        self.splay(node)
+        if node.balance == 2:
+            if node.right.balance == -1:
+                self.right_rotate(node.right)
+                self.double_rotations += 1
+            else:
+                self.single_rotations += 1
+            self.left_rotate(node)
+        elif node.balance == -2:
+            if node.left.balance == 1:
+                self.left_rotate(node.left)
+                self.double_rotations += 1
+            else:
+                self.single_rotations += 1
+            self.right_rotate(node)
+        elif node.parent is not None:
+            self.rebalance(node.parent)
 
     def right_rotate(self, node):
         new_root = node.left
         new_root.parent = node.parent
-
         if new_root.parent is not None:
             if new_root.parent.left == node:
                 new_root.parent.left = new_root
@@ -80,6 +73,9 @@ class SplayTree:
         if new_root.right is not None:
             new_root.right.parent = node
         new_root.right = node
+
+        self.calculate_heights(new_root.right)
+        self.calculate_heights(new_root)
 
     def left_rotate(self, node):
         new_root = node.right
@@ -99,8 +95,16 @@ class SplayTree:
             new_root.left.parent = node
         new_root.left = node
 
-    def print_tree_in_latex(self):
+        self.calculate_heights(new_root.left)
+        self.calculate_heights(new_root)
 
+    def calculate_heights(self, node):
+        left_height = node.left.height if node.left is not None else 0
+        right_height = node.right.height if node.right is not None else 0
+        node.height = 1 + max(left_height, right_height)
+        node.balance = right_height - left_height
+
+    def print_tree_in_latex(self):
         tree_string = self._print_tree_in_latex_helper(self.root)
 
         print(f"\\begin{{tikzpicture}}[level/.style={{sibling distance=60mm/#1}}]")
@@ -109,7 +113,6 @@ class SplayTree:
         print(f"\\\[20pt]")
 
     def _print_tree_in_latex_helper(self, node):
-
         if node is None:
             return ""
 
