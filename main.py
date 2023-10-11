@@ -1,19 +1,20 @@
 import random
-from avl import AVLTree
+from bplus import BPlusTree
 
-data = [80, 100, 50, 30, 110, 60, 20, 70, 40, 90, 10]
+data = [2, 17, 26, 5, 10, 21,
+        14, 16, 11, 12, 13]
 
-# print(f"\\documentclass{{article}}")
-# print(f"\\usepackage{{tikz}}")
-# print(f"\\usetikzlibrary{{trees}}")
-# print(f"\\begin{{document}}")
+print(f"\\documentclass{{article}}")
+print(f"\\usepackage{{tikz}}")
+print(f"\\usetikzlibrary{{trees, arrows.meta,shapes.multipart}}")
+print(f"\\usepackage{{forest}}")
+print(f"\\newcommand\mpnc[3]{{\\nodepart{{one}} $#1$\\nodepart{{two}} $#2$\\nodepart{{three}} $#3$}}")
+print(f"\\begin{{document}}")
 
-for i in range(1000):
-    tree = AVLTree()
-    random.shuffle(data)
-    for x in data:
-        tree.insert(x)
-    if tree.single_rotations == 3 and tree.double_rotations == 2:
-        print(data)
+tree = BPlusTree(4)
 
-# print(f"\\end{{document}}")
+for key in data:
+    tree.insert(key)
+    tree.print_in_latex()
+
+print(f"\\end{{document}}")
