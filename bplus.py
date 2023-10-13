@@ -24,25 +24,31 @@ class BPlusNode:
                 self.keys[i] = key
                 self.children[i + 1] = right_child
 
+    def remove_key(self, index):
+        self.keys = self.keys[0: index] + self.keys[index + 1:]
+        self.children = self.children[:index + 1] + self.children[index + 2:]
+
     def split(self, key, right_child=None):
         self.append_key(key, right_child)
 
         right = BPlusNode(self.leaf, self.degree)
-        right.children.append(None)
+        split_key = self.keys[math.ceil(len(self.keys) / 2)]
 
-        for i in range(math.ceil(len(self.keys) / 2), len(self.keys)):
-            right.keys.append(self.keys[i])
-            right.children.append(self.children[i + 1])
+        if self.leaf:
+            right.keys = self.keys[math.ceil(len(self.keys) / 2):]
+        else:
+            right.keys = self.keys[math.ceil(len(self.keys) / 2) + 1:]
+            right.children = self.children[math.ceil(len(self.keys) / 2) + 1:]
 
         self.keys = self.keys[0: math.ceil(len(self.keys) / 2)]
-        self.children = self.children[0: math.ceil(len(self.children) / 2) + 1]
+        self.children = self.children[0: math.ceil(len(self.children) / 2)]
 
-        return right.keys[0], right
+        return split_key, right
 
 
 def search(keys, key):
     for i in range(len(keys)):
-        if keys[i] >= key:
+        if keys[i] > key:
             return i
     return len(keys)
 
@@ -97,6 +103,55 @@ class BPlusTree:
                 return None, None
 
         return None, None
+
+    def delete(self, key):
+        self._delete(self.root, key)
+
+    def _delete(self, node, key):
+        if node.leaf:
+            if key in node.keys:
+                node.keys.remove(key)
+                if len(node.keys) == 0:
+                    if node == self.root:
+                        self.root = BPlusNode(True, self.degree)
+                    else:
+                        node = None
+                elif len(node.keys) < (self.degree + 1) // 2:
+                    return True, None
+
+            return False
+
+        index = search(node.keys, key)
+        child = node.children[index]
+        if child is not None:
+            if self._delete(child, key):
+                target_sibling = None
+                if index > 0:
+                    left = node.children[index - 1]
+                    if left is not None and len(left.keys) > (self.degree + 1) // 2:
+                        target_sibling = left
+                if index < len(node.keys) and target_sibling is None:
+                    right = node.children[index + 1]
+                    if right is not None and len(right.keys) > (self.degree + 1) // 2:
+                        target_sibling = right
+
+                if target_sibling is not None:
+                    if target_sibling.keys[0] > child.keys[0]:
+                        child.append_key(target_sibling.keys[0], target_sibling.children[1])
+                        target_sibling.remove_key(0)
+                        new_split_key = target_sibling.keys[0]
+                        node.keys[index] = new_split_key
+                    else:
+                        child.append_key(target_sibling.keys[-1], target_sibling.children[len(target_sibling.keys)])
+                        target_sibling.remove_key(len(target_sibling.keys) - 1)
+                        new_split_key = child.keys[0]
+                        node.keys[index - 1] = new_split_key
+                else:
+                    # combine children
+                    pass
+
+        else:
+            return False, None
 
     def print_in_latex(self):
         print("\\begin{forest}")
