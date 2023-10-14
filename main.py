@@ -1,7 +1,7 @@
 import random
 from bplus import BPlusTree
 
-data = [2, 15, 20, 3, 9, 19, 12, 14, 10, 11, 13, 17, 22]
+data = [2, 16, 20, 3, 9, 19, 12, 14, 10, 11, 13, 17, 22, 23]
 
 print(f"\\documentclass{{article}}")
 print(f"\\usepackage{{tikz}}")
@@ -13,18 +13,23 @@ print(f"\\begin{{document}}")
 tree = BPlusTree(4)
 
 for key in data:
-    if key == 22:
-        pass
     tree.insert(key)
-    tree.print_in_latex()
+    # tree.print_in_latex()
+tree.print_in_latex()
+
+tree.delete(2)
+tree.print_in_latex()
+tree.delete(9)
+tree.print_in_latex()
+tree.delete(13)
+tree.print_in_latex()
 tree.delete(12)
+tree.print_in_latex()
+tree.delete(3)
 tree.print_in_latex()
 tree.delete(14)
 tree.print_in_latex()
-tree.delete(17)
+tree.delete(10)
 tree.print_in_latex()
-tree.delete(2)
-tree.print_in_latex()
-
 
 print(f"\\end{{document}}")

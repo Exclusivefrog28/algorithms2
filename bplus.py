@@ -45,6 +45,14 @@ class BPlusNode:
 
         return split_key, right
 
+    def merge(self, other_node):
+        if self.keys[0] < other_node.keys[0]:
+            self.keys = self.keys + other_node.keys
+            self.children = self.children + other_node.children[1:]
+        else:
+            self.keys = other_node.keys + self.keys
+            self.children = other_node.children + self.children[1:]
+
 
 def search(keys, key):
     for i in range(len(keys)):
@@ -106,6 +114,8 @@ class BPlusTree:
 
     def delete(self, key):
         self._delete(self.root, key)
+        if len(self.root.keys) == 0:
+            self.root = self.root.children[0]
 
     def _delete(self, node, key):
         if node.leaf:
@@ -117,7 +127,7 @@ class BPlusTree:
                     else:
                         node = None
                 elif len(node.keys) < (self.degree + 1) // 2:
-                    return True, None
+                    return True
 
             return False
 
@@ -126,32 +136,70 @@ class BPlusTree:
         if child is not None:
             if self._delete(child, key):
                 target_sibling = None
+                target_right = False
                 if index > 0:
                     left = node.children[index - 1]
-                    if left is not None and len(left.keys) > (self.degree + 1) // 2:
+                    if (left is not None and (len(left.keys) > (self.degree + 1) // 2)
+                            or (not child.leaf and (len(left.keys) + 1 > (self.degree + 1) // 2))):
                         target_sibling = left
                 if index < len(node.keys) and target_sibling is None:
                     right = node.children[index + 1]
-                    if right is not None and len(right.keys) > (self.degree + 1) // 2:
+                    if (right is not None and (len(right.keys) > (self.degree + 1) // 2)
+                            or (not child.leaf and (len(right.keys) + 1 > (self.degree + 1) // 2))):
                         target_sibling = right
+                        target_right = True
 
                 if target_sibling is not None:
-                    if target_sibling.keys[0] > child.keys[0]:
-                        child.append_key(target_sibling.keys[0], target_sibling.children[1])
-                        target_sibling.remove_key(0)
-                        new_split_key = target_sibling.keys[0]
-                        node.keys[index] = new_split_key
+                    if child.leaf:
+                        if target_right:
+                            child.append_key(target_sibling.keys[0], target_sibling.children[1])
+                            target_sibling.remove_key(0)
+                            new_split_key = target_sibling.keys[0]
+                            node.keys[index] = new_split_key
+                        else:
+                            child.append_key(target_sibling.keys[-1], target_sibling.children[len(target_sibling.keys)])
+                            target_sibling.remove_key(len(target_sibling.keys) - 1)
+                            new_split_key = child.keys[0]
+                            node.keys[index - 1] = new_split_key
                     else:
-                        child.append_key(target_sibling.keys[-1], target_sibling.children[len(target_sibling.keys)])
-                        target_sibling.remove_key(len(target_sibling.keys) - 1)
-                        new_split_key = child.keys[0]
-                        node.keys[index - 1] = new_split_key
-                else:
-                    # combine children
-                    pass
+                        if target_right:
+                            child.children.append(target_sibling.children[0])
+                            target_sibling.children = target_sibling.children[1:]
+                            child.keys.append(node.keys[index - 1])
+                            node.keys[index - 1] = target_sibling.keys[0]
+                            target_sibling.keys = target_sibling.keys[1:]
+                        else:
+                            child.children.append(child.children[0])
+                            child.children[0] = target_sibling.children[-1]
+                            target_sibling.children = target_sibling.children[:-1]
+                            child.keys.append(node.keys[index - 1])
+                            node.keys[index - 1] = target_sibling.keys[-1]
+                            target_sibling.keys = target_sibling.keys[:-1]
 
+                else:
+                    if child.leaf:
+                        if index > 0:
+                            node.children[index - 1].merge(child)
+                            node.remove_key(index - 1)
+                        else:
+                            child.merge(node.children[index + 1])
+                            node.remove_key(0)
+                    else:
+                        if index > 0:
+                            target_sibling = node.children[index - 1]
+                            target_sibling.children.append(child.children[0])
+                            target_sibling.keys.append(node.keys[index - 1])
+                            node.remove_key(index - 1)
+                        else:
+                            target_sibling = node.children[index + 1]
+                            child.children = [child.children[0]] + target_sibling.children
+                            child.keys = [node.keys[0]] + target_sibling.keys
+                            node.remove_key(0)
+
+                    if len(node.keys) == 0:
+                        return True
         else:
-            return False, None
+            return False
 
     def print_in_latex(self):
         print("\\begin{forest}")
@@ -179,8 +227,7 @@ class BPlusTree:
         for i in range(len(children)):
             if children[i] is None:
                 continue
-            latex_string += "\n"
             latex_string += self._print_in_latex(children[i])
-        latex_string += "\n]"
+        latex_string += "]"
 
         return latex_string
