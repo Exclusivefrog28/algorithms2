@@ -1,35 +1,26 @@
 import random
-from bplus import BPlusTree
+from graph import Graph, print_dependencies
 
-data = [2, 16, 20, 3, 9, 19, 12, 14, 10, 11, 13, 17, 22, 23]
+graph_keys = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+adj_matrix = [[0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+              [1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+              [0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1],
+              [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+              [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0]]
 
 print(f"\\documentclass{{article}}")
-print(f"\\usepackage{{tikz}}")
-print(f"\\usetikzlibrary{{trees, arrows.meta,shapes.multipart}}")
-print(f"\\usepackage{{forest}}")
-print(f"\\newcommand\mpnc[3]{{\\nodepart{{one}} $#1$\\nodepart{{two}} $#2$\\nodepart{{three}} $#3$}}")
+print_dependencies()
 print(f"\\begin{{document}}")
 
-tree = BPlusTree(4)
-
-for key in data:
-    tree.insert(key)
-    # tree.print_in_latex()
-tree.print_in_latex()
-
-tree.delete(2)
-tree.print_in_latex()
-tree.delete(9)
-tree.print_in_latex()
-tree.delete(13)
-tree.print_in_latex()
-tree.delete(12)
-tree.print_in_latex()
-tree.delete(3)
-tree.print_in_latex()
-tree.delete(14)
-tree.print_in_latex()
-tree.delete(10)
-tree.print_in_latex()
-
+graph = Graph(adj_matrix, graph_keys)
+graph.reduce_to_dag()
+graph.print_in_latex()
+print(graph.topological_order())
 print(f"\\end{{document}}")

@@ -231,3 +231,8 @@ class BPlusTree:
         latex_string += "]"
 
         return latex_string
+
+    def print_dependecies(self):
+        print(f"\\usetikzlibrary{{trees, arrows.meta,shapes.multipart}}")
+        print(f"\\usepackage{{forest}}")
+        print(f"\\newcommand\mpnc[3]{{\\nodepart{{one}} $#1$\\nodepart{{two}} $#2$\\nodepart{{three}} $#3$}}")
