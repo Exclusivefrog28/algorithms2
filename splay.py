@@ -1,3 +1,6 @@
+import random
+
+
 class SplayTreeNode:
     def __init__(self, key):
         self.key = key
@@ -9,6 +12,8 @@ class SplayTreeNode:
 class SplayTree:
     def __init__(self):
         self.root = None
+        self.single_rotations = 0
+        self.double_rotations = 0
 
     def insert(self, key):
         current_node = self.root
@@ -43,23 +48,26 @@ class SplayTree:
         grandparent = parent.parent
 
         if grandparent is None:
+            self.single_rotations += 1
             if node == parent.left:
                 self.right_rotate(parent)
             else:
                 self.left_rotate(parent)
+        else:
+            self.double_rotations += 1
 
-        if node == parent.left and parent == grandparent.left:
-            self.right_rotate(grandparent)
-            self.right_rotate(parent)
-        elif node == parent.right and parent == grandparent.right:
-            self.left_rotate(grandparent)
-            self.left_rotate(parent)
-        elif node == parent.left and parent == grandparent.right:
-            self.right_rotate(parent)
-            self.left_rotate(grandparent)
-        elif node == parent.right and parent == grandparent.left:
-            self.left_rotate(parent)
-            self.right_rotate(grandparent)
+            if node == parent.left and parent == grandparent.left:
+                self.right_rotate(grandparent)
+                self.right_rotate(parent)
+            elif node == parent.right and parent == grandparent.right:
+                self.left_rotate(grandparent)
+                self.left_rotate(parent)
+            elif node == parent.left and parent == grandparent.right:
+                self.right_rotate(parent)
+                self.left_rotate(grandparent)
+            elif node == parent.right and parent == grandparent.left:
+                self.left_rotate(parent)
+                self.right_rotate(grandparent)
 
         self.splay(node)
 
@@ -99,24 +107,87 @@ class SplayTree:
             new_root.left.parent = node
         new_root.left = node
 
-    def print_tree_in_latex(self):
+    def print_in_latex(self, obscure=None):
 
-        tree_string = self._print_tree_in_latex_helper(self.root)
+        tree_string = f"""
+        \\begin{{tikzpicture}}[level/.style={{sibling distance=80mm/#1}},scale=0.7,transform shape]
+        \\{self._print_in_latex_helper(self.root, obscure)};
+        \\end{{tikzpicture}}
+        """
 
-        print(f"\\begin{{tikzpicture}}[level/.style={{sibling distance=60mm/#1}}]")
-        print(f"\\{tree_string};")
-        print(f"\\end{{tikzpicture}}")
-        print(f"\\\[20pt]")
+        return tree_string
 
-    def _print_tree_in_latex_helper(self, node):
+    def _print_in_latex_helper(self, node, obscure):
 
         if node is None:
             return ""
 
-        left_child = f"child {{{self._print_tree_in_latex_helper(node.left)}}}" if node.left is not None else "child[missing]"
-        right_child = f"child {{{self._print_tree_in_latex_helper(node.right)}}}" if node.right is not None else "child[missing]"
+        left_child = f"child {{{self._print_in_latex_helper(node.left, obscure)}}}" if node.left is not None else "child[missing]"
+        right_child = f"child {{{self._print_in_latex_helper(node.right, obscure)}}}" if node.right is not None else "child[missing]"
 
         if node.left is None and node.right is None:
             left_child, right_child = "", ""
 
-        return f"node [circle,draw] {{{node.key}}} {left_child} {right_child}"
+        key = node.key
+        if obscure is not None:
+            if node.key == obscure[0]:
+                key = "X"
+            elif node.key == obscure[1]:
+                key = "Y"
+            elif node.key == obscure[2]:
+                key = "Z"
+            else:
+                key = "?"
+
+        return f"node [circle,draw] {{{key}}} {left_child} {right_child}"
+
+def get_permutations(data, iterations, single_rotations, double_rotations):
+    selected_permutations = []
+
+    for i in range(iterations):
+        tree = SplayTree()
+        random.shuffle(data)
+        for x in data:
+            tree.insert(x)
+        if tree.single_rotations == single_rotations and tree.double_rotations == double_rotations:
+            if data not in selected_permutations:
+                selected_permutations.append(data.copy())
+
+    return selected_permutations
+
+
+def make_question(dataset, seed):
+    random.seed(seed)
+    data = dataset[random.randint(0, len(dataset) - 1)][:-1].split(",")
+    data = list(map(int, data))
+    tree = SplayTree()
+    for x in data:
+        tree.insert(x)
+
+    data_string = ", ".join(map(str, data))
+
+    obscure = random.sample(data[0:-1], 3)
+
+    question_string = f"""
+    \\item{{
+        Építsünk \\textbf{{S-fát}} a következő adatokból: 
+        \\textbf{{{data_string}}} !\\\\[1em]
+        A fa végső állapotában milyen kulcsok találhatóak az X,Y,Z helyeken?\\\\[1em]
+        \\begin{{center}}
+        {tree.print_in_latex(obscure)}
+        \\end{{center}}
+    }}
+    """
+    answer_string = f"""
+    \\item{{
+        Építsünk \\textbf{{S-fát}} a következő adatokból: 
+        \\textbf{{{data_string}}} !\\\\[1em]
+        A fa végső állapotában milyen kulcsok találhatóak az X,Y,Z helyeken?\\\\
+        X: {obscure[0]}, Y: {obscure[1]}, Z: {obscure[2]}\\\\
+        \\begin{{center}}
+        {tree.print_in_latex()}
+        \\end{{center}}
+    }}
+    """
+
+    return question_string, answer_string
