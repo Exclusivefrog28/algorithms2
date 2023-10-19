@@ -50,15 +50,21 @@ def make_quiz(count, seed, print_twosided=False, reverse=False):
     answer_first_pages = []
     answer_second_pages = []
 
+    answers = []
+
     for i in range(count):
         seed = ''.join(random.choice('123456789ABCDEFGHJKLMNOPQRSTUVWXYZ') for i in range(6))
 
-        avl_question_1, avl_answer_1 = avl.make_question(avl_dataset_1, seed)
-        avl_question_2, avl_answer_2 = avl.make_question(avl_dataset_2, seed)
-        bplus_question, bplus_answer = bplus.make_question(bplus_dataset, seed)
-        splay_question, splay_answer = splay.make_question(splay_dataset, seed)
-        dfs_question, dfs_answer = graph.make_question_dfs(dfs_dataset, seed)
-        reduction_question, reduction_answer = graph.make_question_reduction(reduction_dataset, seed)
+        avl_question_1, avl_answer_1, avl_solution_1 = avl.make_question(avl_dataset_1, seed)
+        avl_question_2, avl_answer_2, avl_solution_2 = avl.make_question(avl_dataset_2, seed)
+        bplus_question, bplus_answer, bplus_solution = bplus.make_question(bplus_dataset, seed)
+        splay_question, splay_answer, splay_solution = splay.make_question(splay_dataset, seed)
+        dfs_question, dfs_answer, dfs_solution = graph.make_question_dfs(dfs_dataset, seed)
+        reduction_question, reduction_answer, reduction_solution = graph.make_question_reduction(reduction_dataset,
+                                                                                                 seed)
+
+        answer = [seed] + avl_solution_1 + avl_solution_2 + bplus_solution + splay_solution + dfs_solution + reduction_solution
+        answers.append(answer)
 
         exam_first_page = f"""\\vspace*{{-0.6in}}
         \\noindent
@@ -174,9 +180,24 @@ def make_quiz(count, seed, print_twosided=False, reverse=False):
     with open(f"exam{'_p' if not print_twosided else ''}{'_r' if reverse else ''}.tex", "w", encoding="utf-8") as f:
         f.write(exam_string)
         f.close()
-    with open(f"answers.tex{'_p' if not print_twosided else ''}{'_r' if reverse else ''}", "w", encoding="utf-8") as f:
+    with open(f"answers{'_p' if not print_twosided else ''}{'_r' if reverse else ''}.tex", "w", encoding="utf-8") as f:
         f.write(answer_string)
         f.close()
+
+    answers.sort(key=lambda x: x[0])
+
+    with open(f"short_answers_trees.tex", "w", encoding="utf-8") as f:
+        for a in answers:
+            f.write(" & ".join(map(str, a[:9] + [a[0]])) + "\\\\\n")
+            f.write("\\hline\n")
+        f.close()
+
+    with open(f"short_answers_graphs.tex", "w", encoding="utf-8") as f:
+        for a in answers:
+            f.write(" & ".join(map(str, [a[0]] + a[9:] + [a[0]])) + "\\\\\n")
+            f.write("\\hline\n")
+        f.close()
+
 
 def create_avl_dataset():
     data = [40, 90, 20, 100, 60, 10, 110, 30, 50, 80, 70]

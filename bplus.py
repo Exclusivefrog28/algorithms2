@@ -328,7 +328,7 @@ def make_question(dataset, seed):
     }}
     """
 
-    return question_string, answer_string
+    return question_string, answer_string, [f"{obscure[0]}, {obscure[1]}, {obscure[2]}"]
 
 
 def print_dependencies():

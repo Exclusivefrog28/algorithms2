@@ -202,4 +202,6 @@ def make_question(dataset, seed):
             \\end{{enumerate}}}}
     """
 
-    return question_string, answer_string
+    answer = [correct_tree.right_rotations, correct_tree.tipping_inserts, f"{question_keys[0]}, {question_keys[1]}, {question_keys[2]}"]
+
+    return question_string, answer_string, answer

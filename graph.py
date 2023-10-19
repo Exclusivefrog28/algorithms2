@@ -159,18 +159,20 @@ class Graph:
         return reduced_graph
 
     def print_in_latex(self):
-        edges_string = ""
-        for node in self.nodes:
-            for neighbor in node.neighbors:
-                edges_string += f"\"{node.value}\" -> \"{neighbor.value}\", "
-
         graph_string = f"""\\begin{{tikzpicture}}[>=Latex]
             \\graph[simpleer, spring layout]{{
-            {edges_string}
+            {self.print_edges()}
             }};
             \\end{{tikzpicture}}"""
 
         return graph_string
+
+    def print_edges(self):
+        edges_string = ""
+        for node in self.nodes:
+            for neighbor in node.neighbors:
+                edges_string += f"\"{node.value}\" -> \"{neighbor.value}\", "
+        return edges_string
 
 
 def get_edgesets_dfs(data, iterations, tree_edges, back_edges):
@@ -259,7 +261,7 @@ def make_question_dfs(dataset, seed):
     dag = copy.deepcopy(graph)
     dag.reduce_to_dag()
     topological_order = dag.topological_order()
-    topological_order = " & ".join(map(str, topological_order))
+    topological_order_string = " & ".join(map(str, topological_order))
 
     question_string = f"""
     \\item{{
@@ -319,7 +321,7 @@ def make_question_dfs(dataset, seed):
         \\begin{{center}}
         \\begin{{tabular}}{{| m{{2em}} | m{{2em}} | m{{2em}} | m{{2em}} | m{{2em}} | m{{2em}} | m{{2em}} | m{{2em}} | m{{2em}} | m{{2em}} | m{{2em}} | m{{2em}} |}}
             \\hline
-            {topological_order} \\\\
+            {topological_order_string} \\\\
             & & & & & & & & & & & \\\\
             \\hline
         \\end{{tabular}}
@@ -327,7 +329,30 @@ def make_question_dfs(dataset, seed):
     }}     
     """
 
-    return question_string, answer_string
+    back_edges_string = ""
+    for edge in back_edges:
+        if edge == "":
+            continue
+        back_edges_string += f"{edge[0]}→{edge[1]},"
+    back_edges_string = back_edges_string[:-1]
+
+    forward_edges_string = ""
+    for edge in forward_edges:
+        if edge == "":
+            continue
+        forward_edges_string += f"{edge[0]}→{edge[1]},"
+    forward_edges_string = forward_edges_string[:-1]
+
+    cross_edges_string = ""
+    for edge in cross_edges:
+        if edge == "":
+            continue
+        cross_edges_string += f"{edge[0]}→{edge[1]},"
+    cross_edges_string = cross_edges_string[:-1]
+
+    answer = [back_edges_string, forward_edges_string, cross_edges_string, " ".join(map(str, topological_order))]
+
+    return question_string, answer_string, answer
 
 
 def make_question_reduction(dataset, seed):
@@ -368,4 +393,4 @@ def make_question_reduction(dataset, seed):
     }}
     """
 
-    return question_string, answer_string
+    return question_string, answer_string, [reduced_graph.print_edges()]
