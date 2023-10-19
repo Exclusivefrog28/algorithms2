@@ -70,14 +70,14 @@ def make_quiz(count, seed, print_twosided=False, reverse=False):
                 Algoritmusok és adatszerkezetek II. gyakorlat\\\\
                 Zárthelyi dolgozat – 1. témakör
                 }}\\\\
-            2023 október
+            2023. október 24.
             }}
         \\end{{center}}
         \\begin{{enumerate}}
             \\item {{
-                \\textbf{{Készítsen AVL-fákat}} az alábbi kulcsokat a megadott sorrendben beszúrva!
+                \\textbf{{Készítsen AVL-fát}} az alábbi kulcsok (adatok) megadott sorrend szerinti beszúrásával!
                 Ha elromlott a fa kiegyensúlyozása, állítsa helyre a megfelelő forgatással!
-                A fa elkészítése után \\textbf{{válaszoljon az alábbi kérdésekre}}! (\\textit{{Egy kettős forgatás egy balra és egy jobbra forgatásnak számít}})
+                A fa elkészítése után \\textbf{{válaszoljon az alábbi kérdésekre}}! (\\textit{{Egy kettős forgatás egy balra és egy jobbra forgatásnak számít.}})
                 \\begin{{enumerate}}
                 {avl_question_1}
                 {avl_question_2}
@@ -114,14 +114,14 @@ def make_quiz(count, seed, print_twosided=False, reverse=False):
                 Algoritmusok és adatszerkezetek II. gyakorlat\\\\
                 Zárthelyi dolgozat – 1. témakör - MEGOLDÁSOK
                 }}\\\\
-            2023 október
+            2023. október 24.
             }}
         \\end{{center}}
         \\begin{{enumerate}}
             \\item {{
-                \\textbf{{Készítsen AVL-fákat}} az alábbi kulcsokat a megadott sorrendben beszúrva!
+                \\textbf{{Készítsen AVL-fát}} az alábbi kulcsok (adatok) megadott sorrend szerinti beszúrásával!
                 Ha elromlott a fa kiegyensúlyozása, állítsa helyre a megfelelő forgatással!
-                A fa elkészítése után \\textbf{{válaszoljon az alábbi kérdésekre}}! (\\textit{{Egy kettős forgatás egy balra és egy jobbra forgatásnak számít}})
+                A fa elkészítése után \\textbf{{válaszoljon az alábbi kérdésekre}}! (\\textit{{Egy kettős forgatás egy balra és egy jobbra forgatásnak számít.}})
                 \\begin{{enumerate}}
                 {avl_answer_1}
                 {avl_answer_2}

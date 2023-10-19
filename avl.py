@@ -179,9 +179,9 @@ def make_question(dataset, seed):
         \\item {{Adatok: \\textbf{{{data_string}}}
         \\begin{{enumerate}}
             \\item {{Hány jobbra forgatás volt szükséges a beszúrások során?}}\\\\[1em]
-            \\item {{Melyik kulcsok beszúrása után kellett helyreállítani a fa AVL tulajdonságát?}}\\\\[1em]
+            \\item {{Mely kulcsok beszúrásakor sérül az AVL tulajdonság (hogy azt egy forgatással helyre kell állítani)?}}\\\\[1em]
             \\item {{
-                A fa végső állapotában melyik kulcsok találhatóak az X, Y, és Z-vel jelölt csúcsokban?\\\\
+                A fa végső állapotában melyik kulcsok találhatók az X, Y, és Z-vel jelölt csúcsokban?\\\\
                 \\begin{{center}}
                 {question_tree.print_in_latex()}\\\\[2em]
                 \\end{{center}}
@@ -193,8 +193,8 @@ def make_question(dataset, seed):
         \\item {{Adatok: \\textbf{{{data_string}}}
         \\begin{{enumerate}}
             \\item {{Hány jobbra forgatás volt szükséges a beszúrások során?\\\\{correct_tree.right_rotations}}}\\\\
-            \\item {{Melyik kulcsok beszúrása után kellett helyreállítani a fa AVL tulajdonságát?\\\\{",".join(map(str, correct_tree.tipping_inserts))}}}\\\\
-            \\item {{A fa végső állapotában melyik kulcsok találhatóak az X, Y, és Z-vel jelölt csúcsokban?\\\\X={question_keys[0]}, Y={question_keys[1]}, Z={question_keys[2]}}}\\\\\
+            \\item {{Mely kulcsok beszúrásakor sérül az AVL tulajdonság (hogy azt egy forgatással helyre kell állítani)?\\\\{",".join(map(str, correct_tree.tipping_inserts))}}}\\\\
+            \\item {{A fa végső állapotában melyik kulcsok találhatók az X, Y, és Z-vel jelölt csúcsokban?\\\\X={question_keys[0]}, Y={question_keys[1]}, Z={question_keys[2]}}}\\\\\
             \\begin{{center}}
             {correct_tree.print_in_latex()}\\\\[2em]
             \\end{{center}}

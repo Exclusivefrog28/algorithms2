@@ -170,9 +170,9 @@ def make_question(dataset, seed):
 
     question_string = f"""
     \\item{{
-        Építsünk \\textbf{{S-fát}} a következő adatokból: 
+        Építsünk \\textbf{{S-fát}} a következő kulcsok megadott sorrend szerinti beszúrásával: 
         \\textbf{{{data_string}}} !\\\\[1em]
-        A fa végső állapotában milyen kulcsok találhatóak az X,Y,Z helyeken?\\\\[1em]
+        A fa végső állapotában milyen kulcsok találhatók az X,Y,Z helyeken?\\\\[1em]
         \\begin{{center}}
         {tree.print_in_latex(obscure)}
         \\end{{center}}
@@ -180,9 +180,9 @@ def make_question(dataset, seed):
     """
     answer_string = f"""
     \\item{{
-        Építsünk \\textbf{{S-fát}} a következő adatokból: 
+        Építsünk \\textbf{{S-fát}} a következő kulcsok megadott sorrend szerinti beszúrásával: 
         \\textbf{{{data_string}}} !\\\\[1em]
-        A fa végső állapotában milyen kulcsok találhatóak az X,Y,Z helyeken?\\\\
+        A fa végső állapotában milyen kulcsok találhatók az X,Y,Z helyeken?\\\\
         X: {obscure[0]}, Y: {obscure[1]}, Z: {obscure[2]}\\\\
         \\begin{{center}}
         {tree.print_in_latex()}
