@@ -91,23 +91,26 @@ class Graph:
 
 
 def print_table(steps):
-    print('\\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}')
-    print('\\hline')
-    print(
-        '\\multirow{2}{4em}{S} & \\multirow{2}{4em}{ELÉRT} & \\multicolumn{6}{c|}{d} & \\multicolumn{6}{c|}{\\Pi}\\\\')
-    print('\\cline{3-14}')
-    print('& & 1 & 2 & 3 & 4 & 5 & 6 & 1 & 2 & 3 & 4 & 5 & 6\\\\')
-    print('\\hline')
+    table = """
+        \\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+        \\hline
+        \\multirow{2}{4em}{S} & \\multirow{2}{4em}{ELÉRT} & \\multicolumn{6}{c|}{d} & \\multicolumn{6}{c|}{\\Pi}\\\\
+        \\cline{3-14}
+        & & 1 & 2 & 3 & 4 & 5 & 6 & 1 & 2 & 3 & 4 & 5 & 6\\\\
+        \\hline\n
+        """
     for step in steps:
         queue = ', '.join(map(str, step[0]))
         visited = ', '.join(map(str, step[1]))
         d = ' & '.join(map(str, step[2]))
-        pi = ' & '.join(map(str, step[3]))
+        pi = ' & '.join(map(lambda x: 'NIL' if x is None else str(x), step[3]))
 
-        print(f"{queue} & {visited} & {d} & {pi}\\\\")
-        print('\\hline')
+        table += f"{queue} & {visited} & {d} & {pi}\\\\\n"
+        table += '\\hline\n'
 
-    print('\\end{tabular}')
+    table += '\\end{tabular}'
+
+    return table
 
 
 def get_edgesets_bfs(data, iterations, steps, components):
@@ -131,6 +134,7 @@ def get_edgesets_bfs(data, iterations, steps, components):
 
     return edgesets
 
+
 def make_question_bfs(dataset, seed):
     keys = [1, 2, 3, 4, 5, 6]
 
@@ -144,7 +148,17 @@ def make_question_bfs(dataset, seed):
             adj_matrix[i][j] = data[i * 6 + j]
 
     graph = Graph(adj_matrix, keys)
+    result, components = graph.breadth_first_search()
 
+    empty_result = [[[" "], [" "], [" "] * 6, [" "] * 6]] * (len(result))
 
+    question_string = f"""
+                Járjuk be az 1-es csúcsból indulva \\textbf{{szélességi bejárással}} az alábbi gráfot!
+                A csúcsok szomszédjainak feldolgozási sorrendje legyen a csúcsok címkéiben nagyság szerint növekedően rendezett.
+                Töltsük ki a táblázatot lépésenként a sor, a bejárva tömb, valamint a távolsági (d) és szomszédsági (Π) listák értékeivel.\\\\[1em]
+                {graph.print_in_latex()}
+                \\\\
+                {print_table(result[:1] + empty_result[1:])}
+    """
 
-    # return question_string, answer_string, answer
+    return question_string

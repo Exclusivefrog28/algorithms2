@@ -1,4 +1,4 @@
-from bfs import Graph, print_table, get_edgesets_bfs
+from bfs import Graph, print_table, get_edgesets_bfs, make_question_bfs
 
 adj_matrix = [
     [0, 1, 1, 0, 0, 0],
@@ -32,4 +32,8 @@ def create_bfs_dataset():
         f.close()
 
 
-create_bfs_dataset()
+with open("exam-two/bfs.txt", "r") as f:
+    bfs_dataset = f.readlines()
+    f.close()
+
+print(make_question_bfs(bfs_dataset, "rudi"))
