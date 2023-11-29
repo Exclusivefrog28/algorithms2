@@ -1,21 +1,35 @@
-from bfs import Graph
+from bfs import Graph, print_table, get_edgesets_bfs
 
 adj_matrix = [
-    [0, 1, 0, 1, 0],
-    [0, 0, 1, 0, 0],
-    [0, 0, 0, 0, 1],
-    [0, 0, 0, 0, 1],
-    [0, 1, 0, 0, 0]
+    [0, 1, 1, 0, 0, 0],
+    [0, 0, 1, 1, 1, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 1, 0],
+    [0, 0, 0, 0, 0, 1],
+    [0, 1, 0, 0, 0, 0]
 ]
 
-graph = Graph(adj_matrix, [1, 2, 3, 4, 5])
 
-print('\\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|}')
-print('\\hline')
-print('\\multirow{2}{4em}{S} & \\multirow{2}{4em}{ELÉRT} & \\multicolumn{5}{|c|}{d} & \\multicolumn{5}{|c|}{\\Pi}\\\\')
-print('& & 1 & 2 & 3 & 4 & 5 & 1 & 2 & 3 & 4 & 5\\\\')
-print('\\hline')
+def create_bfs_dataset():
+    data = [
+        [0, 1, 1, 0, 0, 0],
+        [0, 0, 1, 1, 1, 0],
+        [0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 1, 0],
+        [0, 0, 0, 0, 0, 1],
+        [0, 1, 0, 0, 0, 0]
+    ]
 
-graph.breadth_first_search()
+    selected_edgesets = get_edgesets_bfs(data, 100000, [7], 1)
 
-print('\\end{tabular}')
+    with open("exam-two/bfs.txt", "w") as f:
+        for es in selected_edgesets:
+            string = ""
+            for row in es:
+                string += str(" ".join(map(str, row))) + " "
+            string = string[:-1]
+            f.write(string + "\n")
+        f.close()
+
+
+create_bfs_dataset()
