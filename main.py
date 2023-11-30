@@ -1,13 +1,19 @@
-from bfs import Graph, print_table, get_edgesets_bfs, make_question_bfs
+from weighted_graph import Graph
+from bfs import get_edgesets_bfs
+from dijkstra import dijkstra, print_table
 
 adj_matrix = [
-    [0, 1, 1, 0, 0, 0],
-    [0, 0, 1, 1, 1, 0],
+    [0, 3, 0, 0, 0, 0],
+    [0, 0, 0, 4, 10, 13],
     [0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 1, 0],
+    [5, 0, 7, 0, 2, 0],
     [0, 0, 0, 0, 0, 1],
-    [0, 1, 0, 0, 0, 0]
+    [0, 0, 0, 0, 0, 0]
 ]
+
+graph = Graph(adj_matrix, [1, 2, 3, 4, 5, 6])
+result = dijkstra(graph, 1)
+print(print_table(result))
 
 
 def create_bfs_dataset():
@@ -30,10 +36,3 @@ def create_bfs_dataset():
             string = string[:-1]
             f.write(string + "\n")
         f.close()
-
-
-with open("exam-two/bfs.txt", "r") as f:
-    bfs_dataset = f.readlines()
-    f.close()
-
-print(make_question_bfs(bfs_dataset, "rudi"))
