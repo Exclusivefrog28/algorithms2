@@ -72,7 +72,15 @@ def print_table(steps):
     return table
 
 
-def get_edgesets_bfs(data, iterations, steps, components):
+def get_edgesets_bfs(iterations, steps, components):
+    data = [
+        [0, 1, 1, 0, 0, 0],
+        [0, 0, 1, 1, 1, 0],
+        [0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 1, 0],
+        [0, 0, 0, 0, 0, 1],
+        [0, 1, 0, 0, 0, 0]
+    ]
     keys = [1, 2, 3, 4, 5, 6]
     edgesets = []
 
@@ -85,7 +93,7 @@ def get_edgesets_bfs(data, iterations, steps, components):
                         adj_matrix[i][j] = 0
                         adj_matrix[j][i] = 1
         graph = Graph(adj_matrix, keys)
-        result, current_components = graph.breadth_first_search()
+        result, current_components = breadth_first_search(graph)
 
         if len(result) in steps and components == current_components:
             if adj_matrix not in edgesets:
@@ -112,7 +120,7 @@ def make_question_bfs(dataset, seed):
     question_string = f"""\\item{{
             Járjuk be az 1-es csúcsból indulva \\textbf{{szélességi bejárással}} az alábbi gráfot!
             A csúcsok szomszédjainak feldolgozási sorrendje legyen a csúcsok címkéiben nagyság szerint növekedően rendezett.
-            Táblázatban jelöljük lépésenként a sor, a bejárva tömb, valamint a távolsági (d) és szomszédsági (Π) listák tartalmát.\\\\[1em]
+            Táblázatban jelöljük lépésenként a sor, a bejárva tömb, valamint a távolsági (d) és szomszédsági (Π) listák tartalmát.
             \\begin{{center}}
             {graph.print_in_latex()}
             \\end{{center}}
@@ -122,7 +130,7 @@ def make_question_bfs(dataset, seed):
     answer_string = f"""\\item{{
             Járjuk be az 1-es csúcsból indulva \\textbf{{szélességi bejárással}} az alábbi gráfot!
             A csúcsok szomszédjainak feldolgozási sorrendje legyen a csúcsok címkéiben nagyság szerint növekedően rendezett.
-            Táblázatban jelöljük lépésenként a sor, a bejárva tömb, valamint a távolsági (d) és szomszédsági (Π) listák tartalmát.\\\\[1em]
+            Táblázatban jelöljük lépésenként a sor, a bejárva tömb, valamint a távolsági (d) és szomszédsági (Π) listák tartalmát.
             \\begin{{center}}
             {print_table(result)}
             \\end{{center}}

@@ -20,12 +20,13 @@ class Graph:
             self.nodes.append(GraphNode(keys[i]) if keys else GraphNode(i))
         for i, row in enumerate(adj_matrix):
             for j, value in enumerate(row):
-                if value > 0:
+                if value != 0:
                     self.nodes[i].neighbors.append((self.nodes[j], value))
 
     def print_in_latex(self):
         graph_string = f"""\\begin{{tikzpicture}}[>=Latex]
-            \\graph[simpleer, spring layout]{{
+            \\graph[simpleer, spring layout, edge quotes mid, edges={{nodes={{fill=white, inner sep=1pt}}}} {
+        ', node distance=2.75cm, nodes={minimum size=2.5em}' if len(self.nodes) > 6 else ''}]{{
             {self.print_edges()}
             }};
             \\end{{tikzpicture}}"""
@@ -36,6 +37,6 @@ class Graph:
         edges_string = ""
         for node in self.nodes:
             for neighbor in node.neighbors:
-                weight = f"[thick, \"{neighbor[1]}\"]"
+                weight = f"[\"{neighbor[1]}\"]" if neighbor[1] != 1 else ""
                 edges_string += f"\"{node.value}\" ->{weight} \"{neighbor[0].value}\", "
         return edges_string

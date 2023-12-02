@@ -1,9 +1,13 @@
 import copy
+import math
+import random
 
 from weighted_graph import Graph
 
+
 def dijkstra(graph, start):
     result = []
+    overwrites = 0
 
     distances = {}
     previous_nodes = {}
@@ -33,6 +37,8 @@ def dijkstra(graph, start):
         for neighbor in current_node.neighbors:
             temp_distance = distances[current_node.key] + neighbor[1]
             if temp_distance < distances[neighbor[0].key]:
+                if distances[neighbor[0].key] != float('inf'):
+                    overwrites += 1
                 distances[neighbor[0].key] = temp_distance
                 previous_nodes[neighbor[0]] = current_node
                 temp = unvisited_nodes[0]
@@ -41,7 +47,7 @@ def dijkstra(graph, start):
 
         result.append((visited_nodes.copy(), distances.copy().values(), previous_nodes.copy().values()))
 
-    return result
+    return result, overwrites
 
 
 def print_table(steps):
@@ -63,3 +69,71 @@ def print_table(steps):
     table += '      \\end{tabular}'
 
     return table
+
+
+def get_edgesets_dijkstra(iterations, steps, overwrites):
+    data = [
+        [0, 1, 1, 0, 0, 0],
+        [0, 0, 1, 1, 1, 0],
+        [0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 1, 0],
+        [0, 0, 0, 0, 0, 1],
+        [0, 1, 0, 0, 0, 0]
+    ]
+    keys = [1, 2, 3, 4, 5, 6]
+    edgesets = []
+
+    for iteration in range(iterations):
+        adj_matrix = data.copy()
+        for i in range(len(adj_matrix)):
+            for j in range(len(adj_matrix[i])):
+                if adj_matrix[i][j] > 0:
+                    if random.random() < math.sqrt(.5):
+                        adj_matrix[i][j] = 0
+                        adj_matrix[j][i] = random.randint(2, 9)
+        graph = Graph(adj_matrix, keys)
+        result, current_overwrites = dijkstra(graph, 1)
+
+        if len(result) in steps and overwrites == current_overwrites:
+            if adj_matrix not in edgesets:
+                edgesets.append(copy.deepcopy(adj_matrix))
+
+    return edgesets
+
+
+def make_question_dijkstra(dataset, seed):
+    keys = [1, 2, 3, 4, 5, 6]
+
+    random.seed(seed)
+    data = dataset[random.randint(0, len(dataset) - 1)]
+    data = list(map(int, data[:-1].split(" ")))
+    adj_matrix = [[0 for y in range(6)] for x in range(6)]
+
+    for i in range(len(adj_matrix)):
+        for j in range(len(adj_matrix[i])):
+            adj_matrix[i][j] = data[i * 6 + j]
+
+    graph = Graph(adj_matrix, keys)
+    result, overwrites = dijkstra(graph, 1)
+
+    question_string = f"""\\item{{
+            Szemléltessünk a \\textbf{{Dijksra-algoritmus}} működését az alábbi gráfon ahogy megtalálja az 1-es csúcsból, mint
+            forrásból a többi csúcsba vezető legrövidebb utakat! Kövessük nyomon a távolságokat tartalmazó (d) és a 
+            szomszédságokat nyilvántartó (Π) tömbök tartalmának változását az algoritmus futása során! 
+            \\begin{{center}}
+            {graph.print_in_latex()}
+            \\end{{center}}
+    }}
+    """
+
+    answer_string = f"""\\item{{
+            Szemléltessünk a \\textbf{{Dijksra-algoritmus}} működését az alábbi gráfon ahogy megtalálja az 1-es csúcsból, mint
+            forrásból a többi csúcsba vezető legrövidebb utakat! Kövessük nyomon a távolságokat tartalmazó (d) és a 
+            szomszédságokat nyilvántartó (Π) tömbök tartalmának változását az algoritmus futása során!
+            \\begin{{center}}
+            {print_table(result)}
+            \\end{{center}}
+    }}
+    """
+
+    return question_string, answer_string

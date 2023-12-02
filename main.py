@@ -1,34 +1,47 @@
-from weighted_graph import Graph
+from bellmanford import get_edgesets_bellmanford, make_question_bellmanford
 from bfs import get_edgesets_bfs
-from dijkstra import dijkstra, print_table
+from dijkstra import get_edgesets_dijkstra
 
-adj_matrix = [
-    [0, 3, 0, 0, 0, 0],
-    [0, 0, 0, 4, 10, 13],
-    [0, 0, 0, 0, 0, 0],
-    [5, 0, 7, 0, 2, 0],
-    [0, 0, 0, 0, 0, 1],
-    [0, 0, 0, 0, 0, 0]
-]
+with open("exam-two/bellmanford.txt", "r") as f:
+    dataset = f.readlines()
+    f.close()
 
-graph = Graph(adj_matrix, [1, 2, 3, 4, 5, 6])
-result = dijkstra(graph, 1)
-print(print_table(result))
+q, a = make_question_bellmanford(dataset, "farkas")
+
+print(q)
+print(a)
 
 
 def create_bfs_dataset():
-    data = [
-        [0, 1, 1, 0, 0, 0],
-        [0, 0, 1, 1, 1, 0],
-        [0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 1, 0],
-        [0, 0, 0, 0, 0, 1],
-        [0, 1, 0, 0, 0, 0]
-    ]
-
-    selected_edgesets = get_edgesets_bfs(data, 100000, [7], 1)
+    selected_edgesets = get_edgesets_bfs(100000, [7], 1)
 
     with open("exam-two/bfs.txt", "w") as f:
+        for es in selected_edgesets:
+            string = ""
+            for row in es:
+                string += str(" ".join(map(str, row))) + " "
+            string = string[:-1]
+            f.write(string + "\n")
+        f.close()
+
+
+def create_dijkstra_dataset():
+    selected_edgesets = get_edgesets_dijkstra(100000, [7], 2)
+
+    with open("exam-two/dijkstra.txt", "w") as f:
+        for es in selected_edgesets:
+            string = ""
+            for row in es:
+                string += str(" ".join(map(str, row))) + " "
+            string = string[:-1]
+            f.write(string + "\n")
+        f.close()
+
+
+def create_bellmanford_dataset():
+    selected_edgesets = get_edgesets_bellmanford(1000000, [15, 16, 17])
+
+    with open("exam-two/bellmanford.txt", "w") as f:
         for es in selected_edgesets:
             string = ""
             for row in es:
