@@ -1,12 +1,19 @@
-from bellmanford import get_edgesets_bellmanford, make_question_bellmanford
+from bellmanford import bellmanford, print_table, get_edgesets_bellmanford, make_question_bellmanford
 from bfs import get_edgesets_bfs
 from dijkstra import get_edgesets_dijkstra
+from floyd import make_question_floyd
+from weighted_graph import Graph
 
 with open("exam-two/bellmanford.txt", "r") as f:
     dataset = f.readlines()
     f.close()
 
-q, a = make_question_bellmanford(dataset, "farkas")
+q, a = make_question_bellmanford(dataset, "seed")
+
+print(q)
+print(a)
+
+q, a = make_question_floyd(dataset, "seed")
 
 print(q)
 print(a)
