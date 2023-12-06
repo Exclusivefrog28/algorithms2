@@ -95,7 +95,8 @@ def make_question_huffman(dataset, seed):
 
     question_string = f"""\\item{{
                 Tömörítsük az alábbi 8-bites karaktersorozatot \\textbf{{Huffman-kóddal}}! Rajzoljuk fel a kódolás
-                során készített \\textbf{{Huffman-fát}}, illetve a \\textbf{{kódtáblát}}! Határozzuk meg a \\textbf{{tömörítési rátát}}!
+                során készített \\textbf{{Huffman-fát}} a karaktersorozat alatt található levelek felé.
+                A fa alapján írjuk fel a \\textbf{{kódtáblát}} és határozzuk meg a \\textbf{{tömörítési rátát}}!
                 \\begin{{center}}
                 {data}\\\\
                 \\vspace{{5cm}}
@@ -112,7 +113,8 @@ def make_question_huffman(dataset, seed):
 
     answer_string = f"""\\item{{
                 Tömörítsük az alábbi 8-bites karaktersorozatot \\textbf{{Huffman-kóddal}}! Rajzoljuk fel a kódolás
-                során készített \\textbf{{Huffman-fát}}, illetve a \\textbf{{kódtáblát}}! Határozzuk meg a \\textbf{{tömörítési rátát}}!
+                során készített \\textbf{{Huffman-fát}} a karaktersorozat alatt található levelek felé.
+                A fa alapján írjuk fel a \\textbf{{kódtáblát}} és határozzuk meg a \\textbf{{tömörítési rátát}}!
                 \\begin{{center}}
                 Frekvenciák: {freq}\\\\
                 Kódok: {codes}\\\\
