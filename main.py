@@ -2,17 +2,16 @@ from bellmanford import bellmanford, print_table, get_edgesets_bellmanford, make
 from bfs import get_edgesets_bfs
 from dijkstra import get_edgesets_dijkstra
 from floyd import make_question_floyd
+from huffman import huffman, get_data_huffman, make_question_huffman
 from prim import prim, get_edgesets_prim, make_question_prim
 from undirected_graph import UndirectedGraph
 from weighted_graph import Graph
 
-
-with open("exam-two/prim.txt", "r") as f:
+with open("exam-two/huffman.txt", "r") as f:
     dataset = f.readlines()
     f.close()
 
-q, a = make_question_prim(dataset, "seed")
-
+q, a = make_question_huffman(dataset, 'seed')
 print(q)
 print(a)
 
@@ -68,4 +67,10 @@ def create_prim_dataset():
         f.close()
 
 
-create_prim_dataset()
+def create_huffman_dataset():
+    dataset = get_data_huffman(10000)
+
+    with open("exam-two/huffman.txt", "w") as f:
+        for d in dataset:
+            f.write(d + "\n")
+        f.close()
