@@ -101,17 +101,35 @@ def make_question_prim(dataset, seed):
     visited_nodes, colored_edges = prim(graph, 1)
 
     question_string = f"""\\item{{
-            Szemléltessünk a \\textbf{{Prim-algoritmus}} működését az alábbi gráfon, ahogy az 1-es csúcsból
-            elindulva felépíti a gráf egy minimális költségű feszítőfáját! 
+            Szemléltessünk a \\textbf{{Prim-algoritmus}} működését, ahogy az 1-es csúcsból elindulva 
+            felépíti az alábbi gráf egy minimális költségű feszítőfáját! Adjuk meg az iterációs lépesekben
+            a feszítőfa csúcsait (U) és éleit (F).
             \\begin{{center}}
             {graph.print_in_latex()}
+            \\hfill
+            \\begin{{tabular}}{{x{{2cm}}|x{{4cm}}}}
+            U & F\\\\
+            \\hline
+            1 & \\\\
+            \\hdashline
+              & \\\\
+             \\hdashline
+              & \\\\
+             \\hdashline
+             & \\\\
+             \\hdashline
+             & \\\\
+             \\hdashline
+             & \\\\
+          \\end{{tabular}}
             \\end{{center}}
     }}
     """
 
     answer_string = f"""\\item{{
-            Szemléltessünk a \\textbf{{Prim-algoritmus}} működését az alábbi gráfon, ahogy az 1-es csúcsból
-            elindulva felépíti a gráf egy minimális költségű feszítőfáját! 
+            Szemléltessünk a \\textbf{{Prim-algoritmus}} működését, ahogy az 1-es csúcsból elindulva 
+            felépíti az alábbi gráf egy minimális költségű feszítőfáját! Adjuk meg az iterációs lépesekben
+            a feszítőfa csúcsait (U) és éleit (F).
             \\begin{{center}}
             {graph.print_in_latex(colored_edges[-1])}
             \\hfill

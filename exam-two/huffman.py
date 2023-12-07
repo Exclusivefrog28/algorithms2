@@ -99,7 +99,7 @@ def make_question_huffman(dataset, seed):
                 A fa alapján írjuk fel a \\textbf{{kódtáblát}} és határozzuk meg a \\textbf{{tömörítési rátát}}!
                 \\begin{{center}}
                 {data}\\\\
-                \\vspace{{5cm}}
+                \\vspace{{3.5cm}}
                 \\begin{{tikzpicture}}
                 \\node [minimum height=0.5cm,minimum width=0.5cm,draw] at (0,0) {{{leaves[0]}}};
                 \\node [minimum height=0.5cm,minimum width=0.5cm,draw] at (1.5,0) {{{leaves[1]}}};

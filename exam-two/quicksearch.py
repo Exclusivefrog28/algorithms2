@@ -68,7 +68,43 @@ def make_question_quicksearch(dataset, seed):
                 algoritmus! Összehasonlításnak tekintse a minta és szöveg egy—egy karakterének az összehasonlítását!
                 \\begin{{center}}
                 S = {text}\\\\
-                M = {pattern}
+                M = {pattern}\\\\
+                \\vspace{{0.5cm}}
+                \\begin{{tabular}}{{|x{{0.4cm}}|x{{0.4cm}}|x{{0.4cm}}|x{{0.4cm}}|x{{0.4cm}}|x{{0.4cm}}|x{{0.4cm}}
+                |x{{0.4cm}}|x{{0.4cm}}|x{{0.4cm}}|x{{0.4cm}}|x{{0.4cm}}|x{{0.4cm}}|x{{0.4cm}}|x{{0.4cm}}|x{{0.4cm}}
+                |x{{0.4cm}}|x{{0.4cm}}|x{{0.4cm}}|x{{0.4cm}}|}}
+                \\hline
+                {' & '.join(text)}\\\\
+                \\hline
+                {' & '.join(pattern)} & & & & & & & & & & & & &\\\\
+                \\hline
+                & & & & & & & & & & & & & & & & & & &\\\\
+                \\hline
+                & & & & & & & & & & & & & & & & & & &\\\\
+                \\hline
+                & & & & & & & & & & & & & & & & & & &\\\\
+                \\hline
+                & & & & & & & & & & & & & & & & & & &\\\\
+                \\hline
+                & & & & & & & & & & & & & & & & & & &\\\\
+                \\hline
+                & & & & & & & & & & & & & & & & & & &\\\\
+                \\hline
+                & & & & & & & & & & & & & & & & & & &\\\\
+                \\hline
+                & & & & & & & & & & & & & & & & & & &\\\\
+                \\hline
+                & & & & & & & & & & & & & & & & & & &\\\\
+                \\hline
+                & & & & & & & & & & & & & & & & & & &\\\\
+                \\hline
+                & & & & & & & & & & & & & & & & & & &\\\\
+                \\hline
+                & & & & & & & & & & & & & & & & & & &\\\\
+                \\hline
+                & & & & & & & & & & & & & & & & & & &\\\\
+                \\hline
+                \\end{{tabular}}
                 \\end{{center}}
         }}
         """

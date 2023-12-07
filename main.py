@@ -1,3 +1,3 @@
 from second_exam import make_quiz
 
-make_quiz(40, 'ssqod1')
+make_quiz(40, 'seed')
