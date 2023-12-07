@@ -8,11 +8,16 @@ from undirected_graph import UndirectedGraph
 def prim(graph, start):
     colored_edges = []
     visited_nodes = []
+    colored_edges_history = []
+    visited_nodes_history = []
 
     for node in graph.nodes:
         if node.key == start:
             visited_nodes.append(node)
             break
+
+    visited_nodes_history.append(copy.deepcopy(visited_nodes))
+    colored_edges_history.append(copy.deepcopy(colored_edges))
 
     while len(visited_nodes) < len(graph.nodes):
         min_cost = float('inf')
@@ -29,8 +34,10 @@ def prim(graph, start):
 
         visited_nodes.append(new_node)
         colored_edges.append(min_edge)
+        visited_nodes_history.append(copy.deepcopy(visited_nodes))
+        colored_edges_history.append(copy.deepcopy(colored_edges))
 
-    return colored_edges
+    return visited_nodes_history, colored_edges_history
 
 
 def get_edgesets_prim(iterations):
@@ -61,6 +68,22 @@ def get_edgesets_prim(iterations):
 
     return edgesets
 
+def print_table(visited_nodes, colored_edges):
+    table = """\\begin{tabular}{c|c}
+        U & F\\\\
+        \\hline\n
+        """
+
+    for index, node in enumerate(visited_nodes):
+        step = (visited_nodes[index], colored_edges[index])
+        visited = ', '.join(map(lambda x: str(x.key), step[0]))
+        colored = ', '.join(map(lambda x: f"({x[0]},{x[1]})", step[1]))
+
+        table += f"         {visited} & {colored}\\\\\n"
+
+    table += '      \\end{tabular}'
+
+    return table
 
 def make_question_prim(dataset, seed):
     keys = [1, 2, 3, 4, 5, 6]
@@ -75,7 +98,7 @@ def make_question_prim(dataset, seed):
             adj_matrix[i][j] = data[i * 6 + j]
 
     graph = UndirectedGraph(adj_matrix, keys)
-    colored_edges = prim(graph, 1)
+    visited_nodes, colored_edges = prim(graph, 1)
 
     question_string = f"""\\item{{
             Szemléltessünk a \\textbf{{Prim-algoritmus}} működését az alábbi gráfon, ahogy az 1-es csúcsból
@@ -90,7 +113,9 @@ def make_question_prim(dataset, seed):
             Szemléltessünk a \\textbf{{Prim-algoritmus}} működését az alábbi gráfon, ahogy az 1-es csúcsból
             elindulva felépíti a gráf egy minimális költségű feszítőfáját! 
             \\begin{{center}}
-            {graph.print_in_latex(colored_edges)}
+            {graph.print_in_latex(colored_edges[-1])}
+            \\hfill
+            {print_table(visited_nodes, colored_edges)}
             \\end{{center}}
     }}
     """

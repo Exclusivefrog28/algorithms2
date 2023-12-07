@@ -117,7 +117,7 @@ def make_question_dijkstra(dataset, seed):
     result, overwrites = dijkstra(graph, 1)
 
     question_string = f"""\\item{{
-            Szemléltessünk a \\textbf{{Dijksra-algoritmus}} működését az alábbi gráfon ahogy megtalálja az 1-es csúcsból, mint
+            Szemléltessünk a \\textbf{{Dijkstra-algoritmus}} működését az alábbi gráfon ahogy megtalálja az 1-es csúcsból, mint
             forrásból a többi csúcsba vezető legrövidebb utakat! Kövessük nyomon a távolságokat tartalmazó (d) és a 
             szomszédságokat nyilvántartó (Π) tömbök tartalmának változását az algoritmus futása során! 
             \\begin{{center}}
@@ -127,7 +127,7 @@ def make_question_dijkstra(dataset, seed):
     """
 
     answer_string = f"""\\item{{
-            Szemléltessünk a \\textbf{{Dijksra-algoritmus}} működését az alábbi gráfon ahogy megtalálja az 1-es csúcsból, mint
+            Szemléltessünk a \\textbf{{Dijkstra-algoritmus}} működését az alábbi gráfon ahogy megtalálja az 1-es csúcsból, mint
             forrásból a többi csúcsba vezető legrövidebb utakat! Kövessük nyomon a távolságokat tartalmazó (d) és a 
             szomszédságokat nyilvántartó (Π) tömbök tartalmának változását az algoritmus futása során!
             \\begin{{center}}
