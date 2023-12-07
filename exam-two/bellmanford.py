@@ -41,11 +41,11 @@ def bellmanford(graph, start):
 
 
 def print_table(steps):
-    table = """\\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+    table = """\\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|}
         \\hline
-        \\ & \\multicolumn{8}{c|}{d} & \\multicolumn{8}{c|}{\\Pi}\\\\
+        \\ & \\multicolumn{6}{c|}{d} & \\multicolumn{6}{c|}{\\Pi}\\\\
         \\hline
-        & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8\\\\
+        & 1 & 2 & 3 & 4 & 5 & 6 & 1 & 2 & 3 & 4 & 5 & 6\\\\
         \\hline\n
         """
     for index, step in enumerate(steps):
@@ -62,16 +62,14 @@ def print_table(steps):
 
 def get_edgesets_bellmanford(iterations, overwrites):
     data = [
-        [0, 0, 0, 0, 2, 0, 0, 3],
-        [0, 0, 0, 2, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 2, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 3, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 1, 0, 2, 0],
-        [0, 3, 0, 2, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 1, 1, 0]
+        [0, 1, 1, 0, 0, 0],
+        [0, 0, 1, 1, 1, 0],
+        [0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 1, 0],
+        [0, 0, 0, 0, 0, 1],
+        [0, 1, 0, 0, 0, 0]
     ]
-    keys = [1, 2, 3, 4, 5, 6, 7, 8]
+    keys = [1, 2, 3, 4, 5, 6]
     edgesets = []
 
     percent = iterations / 100
@@ -81,9 +79,17 @@ def get_edgesets_bellmanford(iterations, overwrites):
         for i in range(len(adj_matrix)):
             for j in range(len(adj_matrix[i])):
                 if adj_matrix[i][j] != 0:
-                    if random.random() < 0.1:
+                    if random.random() < 0.25:
                         adj_matrix[i][j] = 0
-                        adj_matrix[j][i] = (random.randint(2, 9) if random.random() < .5 else random.randint(-3, -1))
+                        adj_matrix[j][i] = 1
+
+        remaining_weights = [-2, -1, 2, 3, 4, 5, 6, 7]
+        for i in range(len(adj_matrix)):
+            for j in range(len(adj_matrix[i])):
+                if adj_matrix[i][j] != 0:
+                    adj_matrix[i][j] = random.choice(remaining_weights)
+                    remaining_weights.remove(adj_matrix[i][j])
+
         graph = Graph(adj_matrix, keys)
         result, negative_cycle, current_overwrites = bellmanford(graph, 1)
 
@@ -99,16 +105,16 @@ def get_edgesets_bellmanford(iterations, overwrites):
 
 
 def make_question_bellmanford(dataset, seed):
-    keys = [1, 2, 3, 4, 5, 6, 7, 8]
+    keys = [1, 2, 3, 4, 5, 6]
 
     random.seed(seed)
     data = dataset[random.randint(0, len(dataset) - 1)]
     data = list(map(int, data[:-1].split(" ")))
-    adj_matrix = [[0 for y in range(8)] for x in range(8)]
+    adj_matrix = [[0 for y in range(6)] for x in range(6)]
 
     for i in range(len(adj_matrix)):
         for j in range(len(adj_matrix[i])):
-            adj_matrix[i][j] = data[i * 8 + j]
+            adj_matrix[i][j] = data[i * 6 + j]
 
     graph = Graph(adj_matrix, keys)
     result, negative_cycle, overwrites = bellmanford(graph, 1)

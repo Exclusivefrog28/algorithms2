@@ -51,11 +51,11 @@ def dijkstra(graph, start):
 
 
 def print_table(steps):
-    table = """\\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+    table = """\\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
         \\hline
-        \\multirow{2}{*}{KÉSZ} & \\multicolumn{6}{c|}{d} & \\multicolumn{6}{c|}{\\Pi}\\\\
-        \\cline{2-13}
-        & 1 & 2 & 3 & 4 & 5 & 6 & 1 & 2 & 3 & 4 & 5 & 6\\\\
+        \\multirow{2}{*}{KÉSZ} & \\multicolumn{8}{c|}{d} & \\multicolumn{8}{c|}{\\Pi}\\\\
+        \\cline{2-17}
+        & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8\\\\
         \\hline\n
         """
     for step in steps:
@@ -71,30 +71,39 @@ def print_table(steps):
     return table
 
 
-def get_edgesets_dijkstra(iterations, steps, overwrites):
+def get_edgesets_dijkstra(iterations, overwrites):
     data = [
-        [0, 1, 1, 0, 0, 0],
-        [0, 0, 1, 1, 1, 0],
-        [0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 1, 0],
-        [0, 0, 0, 0, 0, 1],
-        [0, 1, 0, 0, 0, 0]
+        [0, 0, 0, 0, 1, 0, 0, 1],
+        [0, 0, 0, 1, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 1, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 1, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 1, 0, 1, 0],
+        [0, 1, 0, 1, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 1, 1, 0]
     ]
-    keys = [1, 2, 3, 4, 5, 6]
+    keys = [1, 2, 3, 4, 5, 6, 7, 8]
     edgesets = []
 
     for iteration in range(iterations):
         adj_matrix = data.copy()
+        remaining_weights = list(range(2, 15))
         for i in range(len(adj_matrix)):
             for j in range(len(adj_matrix[i])):
                 if adj_matrix[i][j] > 0:
                     if random.random() < math.sqrt(.5):
                         adj_matrix[i][j] = 0
-                        adj_matrix[j][i] = random.randint(2, 9)
+                        adj_matrix[j][i] = 1
+
+        for i in range(len(adj_matrix)):
+            for j in range(len(adj_matrix[i])):
+                if adj_matrix[i][j] > 0:
+                    adj_matrix[i][j] = random.choice(remaining_weights)
+                    remaining_weights.remove(adj_matrix[i][j])
+
         graph = Graph(adj_matrix, keys)
         result, current_overwrites = dijkstra(graph, 1)
-
-        if len(result) in steps and overwrites == current_overwrites:
+        if current_overwrites in overwrites and float('inf') not in result[-1][1]:
             if adj_matrix not in edgesets:
                 edgesets.append(copy.deepcopy(adj_matrix))
 
@@ -102,16 +111,16 @@ def get_edgesets_dijkstra(iterations, steps, overwrites):
 
 
 def make_question_dijkstra(dataset, seed):
-    keys = [1, 2, 3, 4, 5, 6]
+    keys = [1, 2, 3, 4, 5, 6, 7, 8]
 
     random.seed(seed)
     data = dataset[random.randint(0, len(dataset) - 1)]
     data = list(map(int, data[:-1].split(" ")))
-    adj_matrix = [[0 for y in range(6)] for x in range(6)]
+    adj_matrix = [[0 for y in range(8)] for x in range(8)]
 
     for i in range(len(adj_matrix)):
         for j in range(len(adj_matrix[i])):
-            adj_matrix[i][j] = data[i * 6 + j]
+            adj_matrix[i][j] = data[i * 8 + j]
 
     graph = Graph(adj_matrix, keys)
     result, overwrites = dijkstra(graph, 1)
