@@ -8,7 +8,7 @@ from weighted_graph import Graph
 
 def floyd(graph):
     adj_matrix = [[0.0 for y in range(6)] for x in range(6)]
-    predecessors = [['NIL' for y in range(6)] for x in range(6)]
+    predecessors = [['\\emptyset' for y in range(6)] for x in range(6)]
 
     for node in graph.nodes:
         for neighbor in node.neighbors:
@@ -34,13 +34,15 @@ def floyd(graph):
     return distance_matrices, predecessor_matrices
 
 
-def print_matrix(matrix, dtype):
-    string = "$\\begin{pmatrix}\n"
+def print_matrix(matrix, dtype, name, endline=''):
+    string = f"${name} =$ $\\left[\\,\\begin{{NiceArray}}{{x{{0.5cm}}:x{{0.5cm}}:x{{0.5cm}}:x{{0.5cm}}:x{{0.5cm}}:x{{0.5cm}}}}\n"
     for row in matrix:
         row = map(lambda x: str(int(x) if dtype == 'int' else x) if x != float('inf') else '\\infty', row)
         string += f"{' & '.join(row)}\\\\\n"
+        if row != matrix[-1]:
+            string += "\\hdashline\n"
 
-    string += "\\end{pmatrix}$"
+    string += f"\\end{{NiceArray}}\\,\\right]${endline}"
     return string
 
 
@@ -65,12 +67,16 @@ def make_question_floyd(dataset, seed):
     }}
     """
 
+    matrices = ""
+    for i in range(len(F)):
+        endline = "\\\\"
+        matrices += f"{print_matrix(F[i], 'int', 'F_' + str(i))}\n\\hfill\n{print_matrix(P[i], 'string', 'P_' + str(i), endline)}\n\\vspace{{0.15cm}}\\\\\n"
+
     answer_string = f"""\\item{{
             Szemléltessük a \\textbf{{Floyd algoritmus}} működését a 3. feladat gráfján! Adjuk meg az iterációs
             lépésekben adódó F távolsági és P szomszédsági mátrixokat!\\\\
-            {print_matrix(F[-1], 'int')}
-            \\hfill
-            {print_matrix(P[-1], 'string')}
+            \\newpage
+            {matrices}
     }}
     """
 

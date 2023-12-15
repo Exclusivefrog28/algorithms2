@@ -37,6 +37,8 @@ def make_quiz(count, seed):
         \\usepackage{tikz}
         \\usepackage{array}
         \\usepackage{amsmath}
+        \\usepackage{amssymb}
+        \\usepackage{nicematrix}
         \\usepackage{arydshln}
         \\usepackage{multirow}
         \\usepackage{multicol}
@@ -46,7 +48,18 @@ def make_quiz(count, seed):
         \\tikzset{graphs/simpleer/.style={nodes={draw, circle},node distance=1.75cm, nodes={minimum size=2em}}}
         \\usegdlibrary{circular,force,layered,routing}
         \\newcolumntype{x}[1]{>{\\centering\\arraybackslash}p{#1}}
-        \\renewcommand{\\arraystretch}{1.5}
+        \\renewcommand{\\arraystretch}{1.2}
+        \\NiceMatrixOptions
+         {
+          custom-line = 
+           {
+             letter = : ,
+             command = dashedline , 
+             ccommand = cdashedline ,
+            tikz = dashed
+           }
+        } 
+        \\let\\emptyset\\varnothing
         \\begin{document}
         """
     answer_string = copy.copy(exam_string)
