@@ -63,7 +63,7 @@ def make_question_quicksearch(dataset, seed):
 
     question_string = f"""\\item{{
                 Adott az alábbi \\textbf{{S}} szöveg és \\textbf{{M}} minta. Szemléltesse a \\textbf{{gyorskeresés (quicksearch)}} 
-                algoritmus működését! Adja mega \\textbf{{SHIFT vektor értékeit}}! Rajzolja le a szöveg alá a 
+                algoritmus működését! Adja meg a \\textbf{{SHIFT vektor értékeit}}! Rajzolja le a szöveg alá a 
                 \\textbf{{minta eltolásait}} és adja meg, hogy pontosan hány \\textbf{{összehasonlítást}} végez az 
                 algoritmus! Összehasonlításnak tekintse a minta és szöveg egy—egy karakterének az összehasonlítását!
                 \\begin{{center}}
@@ -111,7 +111,7 @@ def make_question_quicksearch(dataset, seed):
 
     answer_string = f"""\\item{{
                 Adott az alábbi \\textbf{{S}} szöveg és \\textbf{{M}} minta. Szemléltesse a \\textbf{{gyorskeresés (quicksearch)}} 
-                algoritmus működését! Adja mega \\textbf{{SHIFT vektor értékeit}}! Rajzolja le a szöveg alá a 
+                algoritmus működését! Adja meg a \\textbf{{SHIFT vektor értékeit}}! Rajzolja le a szöveg alá a 
                 \\textbf{{minta eltolásait}} és adja meg, hogy pontosan hány \\textbf{{összehasonlítást}} végez az 
                 algoritmus! Összehasonlításnak tekintse a minta és szöveg egy—egy karakterének az összehasonlítását!
                 \\begin{{center}}

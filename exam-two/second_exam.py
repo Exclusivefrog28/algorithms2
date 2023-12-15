@@ -88,7 +88,7 @@ def make_quiz(count, seed):
                 \\thispagestyle{{empty}}
                     \\vspace*{{1em}}
                     \\begin{{enumerate}}
-                    \\setcounter{{enumi}}{{2}}
+                    \\setcounter{{enumi}}{{4}}
                     {prim_q}
                     {huffman_q}
                     {quicksearch_q}
@@ -123,7 +123,7 @@ def make_quiz(count, seed):
                 \\thispagestyle{{empty}}
                     \\vspace*{{1em}}
                     \\begin{{enumerate}}
-                    \\setcounter{{enumi}}{{2}}
+                    \\setcounter{{enumi}}{{4}}
                     {prim_a}
                     {huffman_a}
                     {quicksearch_a}

@@ -68,6 +68,7 @@ def get_edgesets_prim(iterations):
 
     return edgesets
 
+
 def print_table(visited_nodes, colored_edges):
     table = """\\begin{tabular}{c|c}
         U & F\\\\
@@ -84,6 +85,7 @@ def print_table(visited_nodes, colored_edges):
     table += '      \\end{tabular}'
 
     return table
+
 
 def make_question_prim(dataset, seed):
     keys = [1, 2, 3, 4, 5, 6]

@@ -22,7 +22,7 @@ def bellmanford(graph, start):
         for node in graph.nodes:
             for neighbor in node.neighbors:
                 current_distance = distances[node.key] + neighbor[1]
-                if current_distance < distances[neighbor[0].key]:
+                if current_distance < new_distances[neighbor[0].key]:
                     new_distances[neighbor[0].key] = current_distance
                     predecessors[neighbor[0].key] = node.key
 
