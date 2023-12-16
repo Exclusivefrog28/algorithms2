@@ -13,7 +13,6 @@ def floyd(graph):
     for node in graph.nodes:
         for neighbor in node.neighbors:
             adj_matrix[node.key - 1][neighbor[0].key - 1] = neighbor[1]
-            predecessors[node.key - 1][neighbor[0].key - 1] = node.key
         for i in range(len(adj_matrix[node.key - 1])):
             if adj_matrix[node.key - 1][i] == 0 and i != (node.key - 1):
                 adj_matrix[node.key - 1][i] = float('inf')
