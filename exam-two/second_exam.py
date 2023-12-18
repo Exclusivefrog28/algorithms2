@@ -81,9 +81,9 @@ def make_quiz(count, seed):
                     \\large{{
                     \\textbf{{
                         Algoritmusok és adatszerkezetek II. gyakorlat\\\\
-                        Zárthelyi dolgozat – 2. témakör
+                        Javító Zárthelyi dolgozat – 2. témakör
                         }}\\\\
-                    2023. december 12.
+                    2023. december 19.
                     }}
                 \\end{{center}}
                 \\begin{{enumerate}}
@@ -149,10 +149,10 @@ def make_quiz(count, seed):
     exam_string += "\n\\end{document}"
     answer_string += "\n\\end{document}"
 
-    with open(f"exam-two/Algo2ZH2-20231212.tex", "w", encoding="utf-8") as f:
+    with open(f"exam-two/Algo2ZH2javito-20231218.tex", "w", encoding="utf-8") as f:
         f.write(exam_string)
         f.close()
-    with open(f"exam-two/Algo2ZH2megoldasok-20231212.tex", "w", encoding="utf-8") as f:
+    with open(f"exam-two/Algo2ZH2javitomegoldasok-20231218.tex", "w", encoding="utf-8") as f:
         f.write(answer_string)
         f.close()
 

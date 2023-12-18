@@ -7,25 +7,25 @@ import splay
 import graph
 
 
-def make_quiz(count, seed, print_twosided=False, reverse=False):
+def make_quiz(count, seed):
     random.seed(seed)
 
-    with open("avl_3s_0d.txt", "r") as f:
+    with open("exam-one/avl_3s_0d.txt", "r") as f:
         avl_dataset_1 = f.readlines()
         f.close()
-    with open("avl_1s_1d.txt", "r") as f:
+    with open("exam-one/avl_1s_1d.txt", "r") as f:
         avl_dataset_2 = f.readlines()
         f.close()
-    with open("bplus.txt", "r") as f:
+    with open("exam-one/bplus.txt", "r") as f:
         bplus_dataset = f.readlines()
         f.close()
-    with open("splay.txt", "r") as f:
+    with open("exam-one/splay.txt", "r") as f:
         splay_dataset = f.readlines()
         f.close()
-    with open("dfs.txt", "r") as f:
+    with open("exam-one/dfs.txt", "r") as f:
         dfs_dataset = f.readlines()
         f.close()
-    with open("reduction.txt", "r") as f:
+    with open("exam-one/reduction.txt", "r") as f:
         reduction_dataset = f.readlines()
         f.close()
 
@@ -45,13 +45,6 @@ def make_quiz(count, seed, print_twosided=False, reverse=False):
 
     answer_string = copy.copy(exam_string)
 
-    exam_first_pages = []
-    exam_second_pages = []
-    answer_first_pages = []
-    answer_second_pages = []
-
-    answers = []
-
     for i in range(count):
         seed = ''.join(random.choice('123456789ABCDEFGHJKLMNOPQRSTUVWXYZ') for i in range(6))
 
@@ -63,9 +56,6 @@ def make_quiz(count, seed, print_twosided=False, reverse=False):
         reduction_question, reduction_answer, reduction_solution = graph.make_question_reduction(reduction_dataset,
                                                                                                  seed)
 
-        answer = [seed] + avl_solution_1 + avl_solution_2 + bplus_solution + splay_solution + dfs_solution + reduction_solution
-        answers.append(answer)
-
         exam_first_page = f"""\\vspace*{{-0.6in}}
         \\noindent
         {{\\hspace*{{-0.3 in}}Név:\\hfill {seed}\\\\
@@ -74,9 +64,9 @@ def make_quiz(count, seed, print_twosided=False, reverse=False):
             \\large{{
             \\textbf{{
                 Algoritmusok és adatszerkezetek II. gyakorlat\\\\
-                Zárthelyi dolgozat – 1. témakör
+                Javító Zárthelyi dolgozat – 1. témakör
                 }}\\\\
-            2023. október 24.
+            2023. december 19.
             }}
         \\end{{center}}
         \\begin{{enumerate}}
@@ -118,9 +108,9 @@ def make_quiz(count, seed, print_twosided=False, reverse=False):
             \\large{{
             \\textbf{{
                 Algoritmusok és adatszerkezetek II. gyakorlat\\\\
-                Zárthelyi dolgozat – 1. témakör - MEGOLDÁSOK
+                Javító Zárthelyi dolgozat – 1. témakör - MEGOLDÁSOK
                 }}\\\\
-            2023. október 24.
+            2023. december 19.
             }}
         \\end{{center}}
         \\begin{{enumerate}}
@@ -157,45 +147,17 @@ def make_quiz(count, seed, print_twosided=False, reverse=False):
         exam_string += exam_first_page
         answer_string += answer_first_page
 
-        if print_twosided:
-            exam_string += exam_second_page
-            answer_string += answer_second_page
-        else:
-            exam_second_pages.append(exam_second_page)
-            answer_second_pages.append(answer_second_page)
-
-    if reverse:
-        exam_second_pages.reverse()
-        answer_second_pages.reverse()
-
-    if not print_twosided:
-        for page in exam_second_pages:
-            exam_string += page
-        for page in answer_second_pages:
-            answer_string += page
+        exam_string += exam_second_page
+        answer_string += answer_second_page
 
     exam_string += "\n\\end{document}"
     answer_string += "\n\\end{document}"
 
-    with open(f"exam{'_p' if not print_twosided else ''}{'_r' if reverse else ''}.tex", "w", encoding="utf-8") as f:
+    with open("exam-one/Algo2ZH1javito-20231218.tex", "w", encoding="utf-8") as f:
         f.write(exam_string)
         f.close()
-    with open(f"answers{'_p' if not print_twosided else ''}{'_r' if reverse else ''}.tex", "w", encoding="utf-8") as f:
+    with open("exam-one/Algo2ZH1javitomegoldasok-20231218.tex", "w", encoding="utf-8") as f:
         f.write(answer_string)
-        f.close()
-
-    answers.sort(key=lambda x: x[0])
-
-    with open(f"short_answers_trees.tex", "w", encoding="utf-8") as f:
-        for a in answers:
-            f.write(" & ".join(map(str, a[:9] + [a[0]])) + "\\\\\n")
-            f.write("\\hline\n")
-        f.close()
-
-    with open(f"short_answers_graphs.tex", "w", encoding="utf-8") as f:
-        for a in answers:
-            f.write(" & ".join(map(str, [a[0]] + a[9:] + [a[0]])) + "\\\\\n")
-            f.write("\\hline\n")
         f.close()
 
 

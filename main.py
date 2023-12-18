@@ -1,3 +1,3 @@
-from second_exam import make_quiz
+from first_exam import make_quiz
 
-make_quiz(40, 'seed')
+make_quiz(1, 'seed')

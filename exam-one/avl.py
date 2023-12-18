@@ -185,7 +185,7 @@ def make_question(dataset, seed):
                 \\begin{{center}}
                 {question_tree.print_in_latex()}\\\\[2em]
                 \\end{{center}}
-            }}
+                }}
         \\end{{enumerate}}}}
         """
 
@@ -198,7 +198,6 @@ def make_question(dataset, seed):
             \\begin{{center}}
             {correct_tree.print_in_latex()}\\\\[2em]
             \\end{{center}}
-            }}
             \\end{{enumerate}}}}
     """
 
